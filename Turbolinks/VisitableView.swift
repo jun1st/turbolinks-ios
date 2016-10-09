@@ -84,17 +84,40 @@ open class VisitableView: UIView {
 
     // MARK: Activity Indicator
 
-    open lazy var activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.color = UIColor.gray
-        view.hidesWhenStopped = true
-        return view
+    open lazy var activityIndicatorView: UIImageView = {
+
+        let loadingImageView = UIImageView()
+
+        loadingImageView.translatesAutoresizingMaskIntoConstraints = false
+        let animateImages: [UIImage] = (1...88).flatMap { UIImage(named: "loading\($0)") }
+
+        loadingImageView.animationImages = animateImages
+
+        let widthConstraint = NSLayoutConstraint(item: loadingImageView,
+                                                 attribute: .width,
+                                                 relatedBy: .equal,
+                                                 toItem: nil,
+                                                 attribute: .notAnAttribute,
+                                                 multiplier: 1.0,
+                                                 constant: 200)
+
+        let heightConstraint = NSLayoutConstraint(item: loadingImageView,
+                                                  attribute: .height,
+                                                  relatedBy: .equal,
+                                                  toItem: nil,
+                                                  attribute: .notAnAttribute,
+                                                  multiplier: 1.0,
+                                                  constant: 37)
+
+        loadingImageView.addConstraint(widthConstraint)
+        loadingImageView.addConstraint(heightConstraint)
+
+        return loadingImageView
     }()
 
     private func installActivityIndicatorView() {
         addSubview(activityIndicatorView)
-        addFillConstraintsForSubview(activityIndicatorView)
+        addCenterConstraintsForSubview(view: activityIndicatorView)
     }
 
     open func showActivityIndicator() {
@@ -192,5 +215,10 @@ open class VisitableView: UIView {
     private func addFillConstraintsForSubview(_ view: UIView) {
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|", options: [], metrics: nil, views: [ "view": view ]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|", options: [], metrics: nil, views: [ "view": view ]))
+    }
+
+    private func addCenterConstraintsForSubview(view: UIView) {
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|", options: [], metrics: nil, views: ["view": view ]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|", options: [], metrics: nil, views: ["view": view ]))
     }
 }
