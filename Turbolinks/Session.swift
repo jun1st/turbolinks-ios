@@ -212,6 +212,7 @@ extension Session: VisitableDelegate {
             completeNavigationForCurrentVisit()
         } else if visitable !== topmostVisit.visitable {
             // Navigating backward
+            visitable.hideVisitableActivityIndicator()
             visitVisitable(visitable, action: .Restore)
         }
     }
